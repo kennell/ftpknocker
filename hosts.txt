@@ -1,0 +1,4 @@
+kernel.org
+facebook.com
+ftp.debian.org
+youtube.com
