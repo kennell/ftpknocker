@@ -1,4 +1,4 @@
 kernel.org
 facebook.com
-ftp.debian.org
+debian.org
 youtube.com
