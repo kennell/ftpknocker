@@ -24,10 +24,9 @@ def tryFtpConnect(host):
 		ftp.connect(host=host, timeout=args.timeout)
 		if '230' in ftp.login():
 			print(host + ' OK')
-		else:
-			print(host + ' DENIED')
+			ftp.quit()
 	except ftplib.all_errors:
-		print(host + ' ERROR')
+		pass
 
 
 for target in targets:
