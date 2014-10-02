@@ -23,7 +23,7 @@ def tryFtpConnect(host):
 	try:
 		ftp.connect(host=host, timeout=args.timeout)
 		if '230' in ftp.login():
-			print(host + ' OK')
+			print(host)
 			ftp.quit()
 	except ftplib.all_errors:
 		pass
