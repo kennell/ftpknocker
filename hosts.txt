@@ -1,4 +1,0 @@
-kernel.org
-facebook.com
-debian.org
-youtube.com
