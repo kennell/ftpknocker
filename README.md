@@ -1,7 +1,16 @@
 ftpknocker
 ==========
 
-ftpknocker is a fast, multi-threaded scanner for finding anonymous FTP servers
+ftpknocker is a fast, multi-threaded scanner for finding anonymous FTP servers.
+
+Requirements
+------------
+
+The iptools module for python must be installed:
+
+```
+sudo pip install iptools
+```
 
 Usage
 -----
@@ -15,23 +24,23 @@ positional arguments:
 optional arguments:
   -h, --help            show this help message and exit
   -t MAXTHREADS, --threads MAXTHREADS
-                        number of threads to use
+                        number of threads to use, default is 20
   -w TIMEOUT, --wait TIMEOUT
-                        seconds to wait before timeout
+                        seconds to wait before timeout, default is 2
 ```
 
 Examples
 --------
+
+The syntax for specifying targets is similar to the one used in nmap. Here are some examples:
 
 Scan the three specified IPs:
 ```
 ./ftpknocker.py 192.168.1.1 192.168.1.2 192.168.1.3
 ```
 
-Scan an entire CIDR IP-block (a total of 254 hosts):
+Scan an entire IP-block using CIDR notation (in this example, all hosts from 192.168.1.1 - 192.168.1.254 will be scanned, a total of 254 hosts):
 ```
 ./ftpknocker.py 192.168.1.0/24
 ```
-
-
 
