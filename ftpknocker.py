@@ -7,9 +7,9 @@ import threading
 argparser = ArgumentParser()
 argparser.add_argument('targets', nargs='+')
 argparser.add_argument('-t', '--threads',
-                        action='store', default=20, type=int, dest='maxThreads', help='number of threads to use')
+                        action='store', default=20, type=int, dest='maxThreads', help='number of threads to use, default is 20')
 argparser.add_argument('-w', '--wait',
-                        action='store', default=2, type=int, dest='timeout', help='seconds to wait before timeout')
+                        action='store', default=2, type=int, dest='timeout', help='seconds to wait before timeout, default is 2')
 # TODO: add option for specifing a file with hosts
 # argparser.add_argument('-f', '--file',
 #                        action='store', dest='hostlist', help='optional file with target hosts')
