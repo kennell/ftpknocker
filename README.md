@@ -39,7 +39,7 @@ Scan the three specified IPs:
 ./ftpknocker.py 192.168.1.1 192.168.1.2 192.168.1.3
 ```
 
-Scan an entire IP-block using CIDR notation (in this example, all hosts from 192.168.1.1 - 192.168.1.254 will be scanned, a total of 254 hosts):
+Scan an entire IP-block using <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing#CIDR_notation">CIDR notation</a> (in this example, all hosts from 192.168.1.1 - 192.168.1.254 will be scanned, a total of 254 hosts):
 ```
 ./ftpknocker.py 192.168.1.0/24
 ```
