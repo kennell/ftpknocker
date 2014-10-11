@@ -6,10 +6,10 @@ ftpknocker is a fast, multi-threaded scanner for finding anonymous FTP servers.
 Requirements
 ------------
 
-The iptools module for python must be installed:
+The netaddr module for python must be installed:
 
 ```
-sudo pip install iptools
+sudo pip install netaddr
 ```
 
 Usage

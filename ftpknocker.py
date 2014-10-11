@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from argparse import ArgumentParser
-import iptools
+from netaddr import IPSet
 import ftplib
 import threading
 
@@ -15,10 +15,17 @@ argparser.add_argument('-w', '--wait',
 #                        action='store', dest='hostlist', help='optional file with target hosts')
 args = argparser.parse_args()
 
-targets = iptools.IpRangeList(*[host for host in args.targets])
+# add the given targets to a IPSet
+targetIPSets = IPSet()
+for target in args.targets:
+	targetIPSets.add(target)
 
-def tryFtpConnect(host):
-	host = host.strip()
+# render the IPSet to a list with individual IPs
+targetlist = list()
+for ip in targetIPSets:
+	targetlist.append(str(ip))
+
+def tryFtpConnect(host):	
 	ftp = ftplib.FTP()
 	try:
 		ftp.connect(host=host, timeout=args.timeout)
@@ -26,10 +33,10 @@ def tryFtpConnect(host):
 			print(host)
 			ftp.quit()
 	except ftplib.all_errors:
-		pass
+		print(host + " ERROR")
 
 
-for target in targets:
+for host in targetlist:
 	while(threading.activeCount() >= args.maxThreads):
 		continue
-	threading.Thread(target=tryFtpConnect, args=(target,)).start()
+	threading.Thread(target=tryFtpConnect, args=(host,)).start()
