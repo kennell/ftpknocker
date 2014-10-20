@@ -2,6 +2,7 @@
 from argparse import ArgumentParser
 from netaddr import IPSet
 from random import shuffle
+from time import sleep
 import ftplib
 import threading
 
@@ -43,7 +44,7 @@ if args.shuffle:
 
 for host in targetlist:
 	while(threading.activeCount() >= args.maxThreads):
-		continue
+		sleep(0.1)
 	threading.Thread(target=tryFtpConnect, args=(host,)).start()
 
 
