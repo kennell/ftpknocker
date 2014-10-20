@@ -16,17 +16,21 @@ Usage
 -----
 
 ```
-usage: ftpknocker.py [-h] [-t MAXTHREADS] [-w TIMEOUT] targets [targets ...]
+usage: ftpknocker.py [-h] [-t MAXTHREADS] [-w TIMEOUT] [-s] targets [targets ...]
 
 positional arguments:
   targets
 
 optional arguments:
   -h, --help            show this help message and exit
+
   -t MAXTHREADS, --threads MAXTHREADS
                         number of threads to use, default is 20
+
   -w TIMEOUT, --wait TIMEOUT
                         seconds to wait before timeout, default is 2
+
+  -s, --shuffle         shuffle the target list
 ```
 
 Examples
