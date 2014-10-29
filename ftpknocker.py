@@ -2,7 +2,6 @@
 from argparse import ArgumentParser
 from netaddr import IPSet
 from random import shuffle
-from time import sleep
 import ftplib
 import threading
 
@@ -22,8 +21,12 @@ def tryFtpConnect(targets):
 				print(host)
 				ftp.quit()
 		except ftplib.all_errors:
-			pass
+			if args.verbose:
+				print(host + ' FAILED')
+			else:
+				pass
 
+# Parse commandline arguments
 argparser = ArgumentParser()
 argparser.add_argument('targets', nargs='+')
 argparser.add_argument('-t', '--threads',
@@ -32,6 +35,8 @@ argparser.add_argument('-w', '--wait',
                         action='store', default=2, type=int, dest='timeout', help='seconds to wait before timeout, default is 2')
 argparser.add_argument('-s', '--shuffle',
                         action='store_true', default=False, dest='shuffle', help='shuffle the target list')
+argparser.add_argument('-v', '--verbose', 
+			action='store_true', default=False, dest='verbose', help='verbose behaviour')
 # TODO: add option for specifing a file with hosts
 # argparser.add_argument('-f', '--file',
 #                        action='store', dest='hostlist', help='optional file with target hosts')
