@@ -6,6 +6,13 @@ from time import sleep
 import ftplib
 import threading
 
+def split_list(l, parts):
+        newlist = []
+        splitsize = 1.0/parts*len(l)
+        for i in range(parts):
+                newlist.append(l[int(round(i*splitsize)):int(round((i+1)*splitsize))])
+        return newlist
+
 def tryFtpConnect(host):	
 	ftp = ftplib.FTP()
 	try:
@@ -29,7 +36,7 @@ argparser.add_argument('-s', '--shuffle',
 #                        action='store', dest='hostlist', help='optional file with target hosts')
 args = argparser.parse_args()
 
-# add the given targets to a IPSet
+# add the given target arguments to a IPSet
 targetIPSets = IPSet()
 for target in args.targets:
 	targetIPSets.add(target)
