@@ -6,22 +6,23 @@ from time import sleep
 import ftplib
 import threading
 
-def split_list(l, parts):
+def splitList(l, parts):
         newlist = []
         splitsize = 1.0/parts*len(l)
         for i in range(parts):
                 newlist.append(l[int(round(i*splitsize)):int(round((i+1)*splitsize))])
         return newlist
 
-def tryFtpConnect(host):	
-	ftp = ftplib.FTP()
-	try:
-		ftp.connect(host=host, timeout=args.timeout)
-		if '230' in ftp.login():
-			print(host)
-			ftp.quit()
-	except ftplib.all_errors:
-		pass
+def tryFtpConnect(targets):
+	for host in targets:
+		ftp = ftplib.FTP()
+		try:
+			ftp.connect(host=host, timeout=args.timeout)
+			if '230' in ftp.login():
+				print(host)
+				ftp.quit()
+		except ftplib.all_errors:
+			pass
 
 argparser = ArgumentParser()
 argparser.add_argument('targets', nargs='+')
@@ -49,9 +50,6 @@ for ip in targetIPSets:
 if args.shuffle:
 	shuffle(targetlist)
 
-for host in targetlist:
-	while(threading.activeCount() >= args.maxThreads):
-		sleep(0.1)
-	threading.Thread(target=tryFtpConnect, args=(host,)).start()
-
-
+targetlist = splitList(targetlist, args.maxThreads)
+for batch in targetlist:
+	threading.Thread(target=tryFtpConnect, args=(batch,)).start()
