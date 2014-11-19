@@ -18,7 +18,10 @@ def tryFtpConnect(targets):
 		try:
 			ftp.connect(host=host, timeout=args.timeout)
 			if '230' in ftp.login():
-				print(host)
+				if args.verbose:
+					print(host + ' FAILED')
+				else:
+					print(host)
 				ftp.quit()
 		except ftplib.all_errors:
 			if args.verbose:
@@ -26,35 +29,42 @@ def tryFtpConnect(targets):
 			else:
 				pass
 
-# Parse commandline arguments
-argparser = ArgumentParser()
-argparser.add_argument('targets', nargs='+')
-argparser.add_argument('-t', '--threads',
-                        action='store', default=20, type=int, dest='maxThreads', help='number of threads to use, default is 20')
-argparser.add_argument('-w', '--wait',
-                        action='store', default=2, type=int, dest='timeout', help='seconds to wait before timeout, default is 2')
-argparser.add_argument('-s', '--shuffle',
-                        action='store_true', default=False, dest='shuffle', help='shuffle the target list')
-argparser.add_argument('-v', '--verbose', 
-			action='store_true', default=False, dest='verbose', help='verbose behaviour')
-# TODO: add option for specifing a file with hosts
-# argparser.add_argument('-f', '--file',
-#                        action='store', dest='hostlist', help='optional file with target hosts')
-args = argparser.parse_args()
+def main():
+	# Parse commandline arguments
+	global args
+	argparser = ArgumentParser()
+	argparser.add_argument('targets', nargs='+')
+	argparser.add_argument('-t', '--threads',
+	                        action='store', default=20, type=int, dest='maxThreads', help='number of threads to use, default is 20')
+	argparser.add_argument('-w', '--wait',
+	                        action='store', default=2, type=int, dest='timeout', help='seconds to wait before timeout, default is 2')
+	argparser.add_argument('-s', '--shuffle',
+	                        action='store_true', default=False, dest='shuffle', help='shuffle the target list')
+	argparser.add_argument('-v', '--verbose', 
+				action='store_true', default=False, dest='verbose', help='verbose behaviour')
+	# TODO: add option for specifing a file with hosts
+	# argparser.add_argument('-f', '--file',
+	#                        action='store', dest='hostlist', help='optional file with target hosts')
+	args = argparser.parse_args()
 
-# add the given target arguments to a IPSet
-targetIPSets = IPSet()
-for target in args.targets:
-	targetIPSets.add(target)
+	# add the given target arguments to a IPSet
+	targetIPSets = IPSet()
+	for target in args.targets:
+		targetIPSets.add(target)
 
-# render the IPSet to a list with individual IPs
-targetlist = list()
-for ip in targetIPSets:
-	targetlist.append(str(ip))
+	# render the IPSet to a list with individual IPs
+	targetlist = list()
+	for ip in targetIPSets:
+		targetlist.append(str(ip))
 
-if args.shuffle:
-	shuffle(targetlist)
+	# check for shuffle argument
+	if args.shuffle:
+		shuffle(targetlist)
 
-targetlist = splitList(targetlist, args.maxThreads)
-for batch in targetlist:
-	threading.Thread(target=tryFtpConnect, args=(batch,)).start()
+	# split work and assign to worker threads
+	targetlist = splitList(targetlist, args.maxThreads)
+	for batch in targetlist:
+		threading.Thread(target=tryFtpConnect, args=(batch,)).start()
+
+if __name__ == "__main__":
+		main()
