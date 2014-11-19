@@ -6,10 +6,12 @@ ftpknocker is a fast, multi-threaded scanner for finding anonymous FTP servers.
 Requirements
 ------------
 
+ftpknocker was created for Python 3.2 and above. It should run on Python 2.x, but i do not test it.
+
 The netaddr module for python must be installed:
 
 ```
-sudo pip install netaddr
+sudo pip3 install netaddr
 ```
 
 Usage
