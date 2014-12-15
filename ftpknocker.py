@@ -1,70 +1,61 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python2
+from __future__ import print_function
+import eventlet
+from eventlet.green import ftplib
 from argparse import ArgumentParser
 from netaddr import IPSet
 from random import shuffle
-import ftplib
-import threading
 
-def splitList(l, parts):
-        newlist = []
-        splitsize = 1.0/parts*len(l)
-        for i in range(parts):
-                newlist.append(l[int(round(i*splitsize)):int(round((i+1)*splitsize))])
-        return newlist
-
-def tryFtpConnect(targets):
-	for host in targets:
+# Try anonymous FTP login
+def try_ftp_login(host):
+	try:
 		ftp = ftplib.FTP()
-		try:
-			ftp.connect(host=host, timeout=args.timeout)
-			if '230' in ftp.login():
-				if args.verbose:
-					print(host + ' FAILED')
-				else:
-					print(host)
-				ftp.quit()
-		except ftplib.all_errors:
-			if args.verbose:
-				print(host + ' FAILED')
-			else:
-				pass
+		ftp.connect(host=host, timeout=args.timeout)
+		if '230' in ftp.login():
+			return host
+		ftp.quit()
+	except ftplib.all_errors:
+		return None
 
-def main():
-	# Parse commandline arguments
-	global args
-	argparser = ArgumentParser()
-	argparser.add_argument('targets', nargs='+')
-	argparser.add_argument('-t', '--threads',
-	                        action='store', default=20, type=int, dest='maxThreads', help='number of threads to use, default is 20')
-	argparser.add_argument('-w', '--wait',
-	                        action='store', default=2, type=int, dest='timeout', help='seconds to wait before timeout, default is 2')
-	argparser.add_argument('-s', '--shuffle',
-	                        action='store_true', default=False, dest='shuffle', help='shuffle the target list')
-	argparser.add_argument('-v', '--verbose', 
-				action='store_true', default=False, dest='verbose', help='verbose behaviour')
-	# TODO: add option for specifing a file with hosts
-	# argparser.add_argument('-f', '--file',
-	#                        action='store', dest='hostlist', help='optional file with target hosts')
-	args = argparser.parse_args()
+# Setup Argument parser
+argparser = ArgumentParser()
+argparser.add_argument('targets', 
+	nargs='+')
+argparser.add_argument('-c', '--connections',
+	action='store', 
+	default=100, 
+	type=int, 
+	dest='maxConnections', 
+	help='Number of concurrent connections, default is 100')
+argparser.add_argument('-t', '--timeout',
+	action='store', 
+	default=5, 
+	type=int, 
+	dest='timeout', 
+	help='Seconds to wait before timeout, default is 5')
+argparser.add_argument('-s', '--shuffle',
+	action='store_true', 
+	default=False, 
+	dest='shuffle', 
+	help='Shuffle the target list')
+args = argparser.parse_args()
 
-	# add the given target arguments to a IPSet
-	targetIPSets = IPSet()
-	for target in args.targets:
-		targetIPSets.add(target)
+# Add  given target arguments to IPSet
+targetIPSet = IPSet()
+for target in args.targets:
+	targetIPSet.add(target)
 
-	# render the IPSet to a list with individual IPs
-	targetlist = list()
-	for ip in targetIPSets:
-		targetlist.append(str(ip))
+# Render IPSet to list
+targetlist = list()
+for ip in targetIPSet:
+	targetlist.append(str(ip))
 
-	# check for shuffle argument
-	if args.shuffle:
-		shuffle(targetlist)
+# Check for shuffle argument
+if args.shuffle:
+	shuffle(targetlist)
 
-	# split work and assign to worker threads
-	targetlist = splitList(targetlist, args.maxThreads)
-	for batch in targetlist:
-		threading.Thread(target=tryFtpConnect, args=(batch,)).start()
-
-if __name__ == "__main__":
-		main()
+# Create and dispatch eventlet workers
+workers = eventlet.GreenPool(args.maxConnections)
+for res in workers.imap(try_ftp_login, targetlist):
+	if res:
+		print (res)
