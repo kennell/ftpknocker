@@ -1,4 +1,4 @@
-Copyright (c) {{{year}}}, kevin@fileperms.org
+Copyright (c) 2014, kevin@fileperms.org
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
