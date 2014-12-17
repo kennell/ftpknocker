@@ -1,38 +1,48 @@
-#!/usr/bin/env python2
-from __future__ import print_function
-import eventlet
-from eventlet.green import ftplib
+#!/usr/bin/env python3
+import ftplib
+import sys
+import threading
 from argparse import ArgumentParser
 from netaddr import IPSet
 from random import shuffle
 
-# Try anonymous FTP login
-def try_ftp_login(host):
-	try:
-		ftp = ftplib.FTP()
-		ftp.connect(host=host, timeout=args.timeout)
-		if '230' in ftp.login():
-			return host
-		ftp.quit()
-	except ftplib.all_errors:
-		return None
+# Split list 
+def split_list(l, parts):
+	newlist = []
+	splitsize = 1.0/parts*len(l)
+	for i in range(parts):
+		newlist.append(l[int(round(i*splitsize)):int(round((i+1)*splitsize))])
+	return newlist
 
-# Setup Argument parser
+# Try anonymous FTP login
+def try_ftp_login(hosts):
+	for host in hosts:
+		host = host.strip()
+		try:
+			ftp = ftplib.FTP()
+			ftp.connect(host=host, timeout=args.timeout)
+			if '230' in ftp.login():
+				print(host)
+				ftp.quit()
+		except ftplib.all_errors:
+			pass
+
+# Init Argument parser
 argparser = ArgumentParser()
 argparser.add_argument('targets', 
-	nargs='+')
-argparser.add_argument('-c', '--connections',
+		nargs='*')
+argparser.add_argument('-t', '--threads',
 	action='store', 
-	default=100, 
+	default=10, 
 	type=int, 
-	dest='maxConnections', 
-	help='Number of concurrent connections, default is 100')
-argparser.add_argument('-t', '--timeout',
+	dest='maxThreads', 
+	help='Number of threads to use, default is 10')
+argparser.add_argument('-w', '--wait',
 	action='store', 
-	default=5, 
+	default=2, 
 	type=int, 
 	dest='timeout', 
-	help='Seconds to wait before timeout, default is 5')
+	help='Seconds to wait before timeout, default is 2')
 argparser.add_argument('-s', '--shuffle',
 	action='store_true', 
 	default=False, 
@@ -40,22 +50,27 @@ argparser.add_argument('-s', '--shuffle',
 	help='Shuffle the target list')
 args = argparser.parse_args()
 
-# Add  given target arguments to IPSet
-targetIPSet = IPSet()
-for target in args.targets:
-	targetIPSet.add(target)
+# Check if we are running in a pipe and read from STDIN
+if not sys.stdin.isatty():
+	args.targets = sys.stdin.readlines()
 
-# Render IPSet to list
+# Add target IPs/Networks to a netaddr-IPSet
+targetSet = IPSet()
+for t in args.targets:
+	targetSet.add(t)
+
+# Render IPSets to a list
 targetlist = list()
-for ip in targetIPSet:
+for ip in targetSet:
 	targetlist.append(str(ip))
 
 # Check for shuffle argument
 if args.shuffle:
 	shuffle(targetlist)
 
-# Create and dispatch eventlet workers
-workers = eventlet.GreenPool(args.maxConnections)
-for res in workers.imap(try_ftp_login, targetlist):
-	if res:
-		print (res)
+# Split list into [maxThreads] smaller batches
+targetlist = split_list(targetlist, args.maxThreads)
+
+# Launch threads
+for batch in targetlist:
+		threading.Thread(target=try_ftp_login, args=(batch,)).start()
