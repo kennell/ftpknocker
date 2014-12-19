@@ -6,7 +6,7 @@ from argparse import ArgumentParser
 from netaddr import IPSet
 from random import shuffle
 
-# Split list 
+# Split list
 def split_list(l, parts):
 	newlist = []
 	splitsize = 1.0/parts*len(l)
@@ -29,24 +29,24 @@ def try_ftp_login(hosts):
 
 # Init Argument parser
 argparser = ArgumentParser()
-argparser.add_argument('targets', 
-		nargs='*')
+argparser.add_argument('targets',
+	nargs='*')
 argparser.add_argument('-t', '--threads',
-	action='store', 
-	default=10, 
-	type=int, 
-	dest='maxThreads', 
+	action='store',
+	default=10,
+	type=int,
+	dest='maxThreads',
 	help='Number of threads to use, default is 10')
 argparser.add_argument('-w', '--wait',
-	action='store', 
-	default=2, 
-	type=int, 
-	dest='timeout', 
+	action='store',
+	default=2,
+	type=int,
+	dest='timeout',
 	help='Seconds to wait before timeout, default is 2')
 argparser.add_argument('-s', '--shuffle',
-	action='store_true', 
-	default=False, 
-	dest='shuffle', 
+	action='store_true',
+	default=False,
+	dest='shuffle',
 	help='Shuffle the target list')
 args = argparser.parse_args()
 
@@ -73,4 +73,4 @@ targetlist = split_list(targetlist, args.maxThreads)
 
 # Launch threads
 for batch in targetlist:
-		threading.Thread(target=try_ftp_login, args=(batch,)).start()
+	threading.Thread(target=try_ftp_login, args=(batch,)).start()
