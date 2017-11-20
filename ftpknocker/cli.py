@@ -3,8 +3,7 @@ import ftplib
 import random
 import threading
 import sys
-from netaddr import IPSet
-from .utils import split_list
+from .utils import split_list, targets_to_ip_list
 
 
 ANONYMOUS_USER = 'anonymous'
@@ -33,10 +32,7 @@ def main(targets, threads, port, timeout, shuffle):
     if not sys.stdin.isatty():
         targets = sys.stdin.readlines()
 
-    ipset = IPSet()
-    for t in targets:
-        ipset.add(t)
-    ips = [str(ip) for ip in ipset]
+    ips = targets_to_ip_list(targets)
 
     if shuffle:
         random.shuffle(ips)
