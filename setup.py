@@ -4,7 +4,7 @@ from setuptools import setup
 setup(
   name = 'ftpknocker',
   packages = ['ftpknocker'],
-  version = '1.0.5',
+  version = '1.0.6',
   license = 'MIT',
   description = 'ftpknocker is a multi-threaded scanner for finding anonymous FTP servers',
   author = 'Kevin Kennell',
