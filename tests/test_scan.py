@@ -17,7 +17,7 @@ NO_FTP_SERVERS = [
 class TestScan(unittest.TestCase):
 
     def test_anonymous_ftp_servers(self):
-        self.assertEquals(True, True)
+        self.skipTest("No implemented")
 
     def test_no_ftp_servers(self):
-        self.assertEquals(True, True)
+        self.skipTest("No implemented")
