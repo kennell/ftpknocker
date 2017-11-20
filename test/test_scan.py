@@ -12,6 +12,3 @@ class TestScan(unittest.TestCase):
 
     def test_known_anonymous_servers(self):
         assert(True)
-
-if __name__ == '__main__':
-    unittest.main()
