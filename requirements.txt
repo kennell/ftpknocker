@@ -7,5 +7,6 @@ idna==2.6
 netaddr==0.7.19
 py==1.5.2
 pytest==3.2.5
+pytest-cov==2.5.1
 requests==2.18.4
 urllib3==1.22

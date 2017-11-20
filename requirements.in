@@ -1,4 +1,5 @@
 click
 netaddr
 pytest
+pytest-cov
 codecov
