@@ -2,10 +2,10 @@
 
 ftpknocker is a multi-threaded scanner for finding anonymous FTP servers
 
-[![Code Climate](https://img.shields.io/codeclimate/maintainability/kennell/ftpknocker.svg)]() [![Codeship](https://img.shields.io/codeship/8bbeefb0-b024-0135-06e5-0696d4e76991.svg)]() [![PyPI](https://img.shields.io/pypi/v/ftpknocker.svg)]()
+[![Code Climate](https://img.shields.io/codeclimate/maintainability/kennell/ftpknocker.svg)]() [![Codeship](https://img.shields.io/codeship/8bbeefb0-b024-0135-06e5-0696d4e76991.svg)]() [![Codecov](https://img.shields.io/codecov/c/github/kennell/ftpknocker.svg)]() [![PyPI](https://img.shields.io/pypi/v/ftpknocker.svg)]() 
 
 
-## How to install
+## Install
 
 ```
 pip install ftpknocker
@@ -24,7 +24,7 @@ Options:
   --help                    Show this message and exit.
 ```
 
-## Usage Examples
+## Usage examples
 
 The syntax for specifying targets is similar to nmap. Here are some examples:
 
@@ -42,3 +42,8 @@ Feed targets from a other program using a pipe (IPs must be sperated by newlines
 ```bash
 cat mytargets.txt | ftpknocker
 ```
+## Development and testing
+
+1. Clone the repository
+2. Install the requirements `pip install -r requirements`
+3. Run `pytest`
