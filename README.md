@@ -2,7 +2,7 @@
 
 ftpknocker is a multi-threaded scanner for finding anonymous FTP servers
 
-[![Maintainability](https://api.codeclimate.com/v1/badges/a5a145968b5c46a80470/maintainability)](https://codeclimate.com/github/kennell/ftpknocker/maintainability)
+[![Code Climate](https://img.shields.io/codeclimate/maintainability/kennell/ftpknocker.svg)]() [![Codeship](https://img.shields.io/codeship/8bbeefb0-b024-0135-06e5-0696d4e76991.svg)]()
 
 
 ## How to install
