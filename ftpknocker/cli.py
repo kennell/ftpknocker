@@ -1,6 +1,5 @@
 import click
 import ftplib
-import multiprocessing
 import random
 import threading
 import sys
@@ -26,7 +25,7 @@ def scan(hosts, port, timeout):
 
 @click.command()
 @click.argument('targets', nargs=-1)
-@click.option('--threads', default=multiprocessing.cpu_count(), help='Number of threads to utilize')
+@click.option('--threads', default=5, help='Number of threads to utilize')
 @click.option('--port', default=21, help='Port to scan')
 @click.option('--timeout', default=2.0, help='Seconds before timeout')
 @click.option('--shuffle/--no-shuffle', default=False, help='Shuffle target list')
