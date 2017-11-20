@@ -31,7 +31,6 @@ def scan(hosts, port, timeout):
 @click.option('--timeout', default=2.0, help='Seconds before timeout')
 @click.option('--shuffle/--no-shuffle', default=False, help='Shuffle target list')
 def main(targets, threads, port, timeout, shuffle):
-    print(sys.version)
     if not sys.stdin.isatty():
         targets = sys.stdin.readlines()
 
