@@ -1,8 +1,10 @@
 # 🔑 ftpknocker
 
-ftpknocker is a multi-threaded scanner for finding anonymous FTP servers
+ftpknocker is a multi-threaded scanner for finding anonymous FTP servers [![PyPI](https://img.shields.io/pypi/v/ftpknocker.svg)]() 
 
-[![Code Climate](https://img.shields.io/codeclimate/maintainability/kennell/ftpknocker.svg)]() [![Travis](https://img.shields.io/travis/kennell/ftpknocker.svg)]() [![Codecov](https://img.shields.io/codecov/c/github/kennell/ftpknocker.svg)]() [![PyPI](https://img.shields.io/pypi/v/ftpknocker.svg)]() 
+*Sponsored by:*
+
+[![VPN Detection](focsec.png)](https://focsec.com)
 
 ## Install
 
